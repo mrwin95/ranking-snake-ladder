@@ -17,8 +17,7 @@ export class GameLogsReader {
       })
       .split('\n')
       .filter(s=>s.trim())
-      .map((row:string): string[] => {  
-        // console.log(row)
+      .map((row:string): string[] => {          
         return row.split(',');
       })
   }
@@ -27,20 +26,14 @@ export class GameLogsReader {
     fs.createReadStream(this.filename)
     .pipe(csv())
     .on('data', (row) => {
-      if(row.event_type === 'game_started'){
-        
-
-        let games: Game = JSON.parse(row.event_payload);
-        // this.gameData = .push(row.event_payload);
-        // console.log('Game', this.gameData.length);
+      if(row.event_type === 'game_started'){      
+        let games: Game = JSON.parse(row.event_payload);        
       }
       if(row.event_type === 'player_joins_game'){
 
       }
       if(row.event_type === 'player_rolls_dice'){
-
-        let dices: Dice = JSON.parse(row.event_payload);
-        // console.log(`Player ${dices.playerId}`);
+        let dices: Dice = JSON.parse(row.event_payload);        
       }
     })
   }

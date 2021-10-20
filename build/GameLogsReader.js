@@ -20,7 +20,6 @@ var GameLogsReader = /** @class */ (function () {
             .split('\n')
             .filter(function (s) { return s.trim(); })
             .map(function (row) {
-            // console.log(row)
             return row.split(',');
         });
     };
@@ -30,14 +29,11 @@ var GameLogsReader = /** @class */ (function () {
             .on('data', function (row) {
             if (row.event_type === 'game_started') {
                 var games = JSON.parse(row.event_payload);
-                // this.gameData = .push(row.event_payload);
-                // console.log('Game', this.gameData.length);
             }
             if (row.event_type === 'player_joins_game') {
             }
             if (row.event_type === 'player_rolls_dice') {
                 var dices = JSON.parse(row.event_payload);
-                // console.log(`Player ${dices.playerId}`);
             }
         });
     };
