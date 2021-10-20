@@ -16,6 +16,7 @@
     "nodemon": "^2.0.14"
   },
   "dependencies": {
-    "@types/node": "^16.11.1"
+    "@types/node": "^16.11.1",
+    "csv-parser": "^3.0.0"
   }
 }

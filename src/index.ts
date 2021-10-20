@@ -1,50 +1,109 @@
 import fs from 'fs';
+import csv from 'csv-parser';
+import { Game } from './Game';
+import { Player } from './Player';
+import { Dice } from './Dice';
 
-const event_type: string[] = [];
+const csvFile = "game_logs.csv";
 
-const games = fs.readFileSync('game_logs.csv', {
-    encoding: 'utf-8'
-}).split('\n')
-.filter(s => s.trim()).map((row: string): string[] => {        
-    return row.split(',')
+class Rank {
+    gameId: number;
+    playerId: number;
+    roll: number;
+
+    constructor(gameId: number, playerId: number, roll: number){
+        this.gameId = gameId;
+        this.playerId = playerId;
+        this.roll = roll;
+    }
+}
+
+const processData = (err:Error, data:[]) => {
+    if(err) {
+        console.log(`An error was encountered: ${err}`);
+        return;
+    }
+
+    data.shift();
+
+    // const ranks = data.map(row => new Rank(...row));
+}
+
+fs.createReadStream(csvFile)
+.pipe(csv({delimiter: ','}, processData));
+
+const results = [];
+let player_rolls_dices:[] = [];
+// let player_rolls_dice = {
+//     GameId: number,
+//     PlayerId: number,
+// }
+fs.createReadStream('game_logs.csv')
+.pipe(csv())
+.on('data', (row) => {
+    
+    if(row.event_type==='game_started'){
+        // const game = new Game(row.);
+        
+        let game: Game = JSON.parse(row.event_payload);
+        // console.log(game);
+    }
+    if(row.event_type==='player_joins_game'){
+        let player: Player = JSON.parse(row.event_payload);
+        // console.log(player);
+    }
+    if(row.event_type==='player_rolls_dice'){        
+
+        let dice: Dice = JSON.parse(row.event_payload);
+
+    }
 })
+.on('end', () => {
+    console.log('CSV file successfully processed');
+});
 
+// const groupBy = (list, keyGetter) => {
+//     const map = new Map();
 
-let headings = games.shift() as string[];
+//     list.forEach((item) => {
+//         const key = keyGetter(item);
+//         const collection = map.get(key);
 
-let data = games.slice(2);
+//         if(!collection) {
+//             map.set(key, [item]);
+//         } else {
+//             collection.push(item);
+//         }
+//     });
 
-// console.log(headings);
-
-// map all the other lines into objects
-
-// let res = games.map(lineArr => {
-//     return lineArr.reduce((a, c, i) => {
-//         a[headings[i]] = c;
-//         return a;
-//     }, "" )
-// });
-
-// console.log(games);
-
-// for(let game of games){
-//     console.log(game);
+//     return map;
 // }
 
-// const game = games[1]
+const groupArrayOfObjects = (list:any, key:string) => {
+    return list.reduce((rv:any, x:any) => {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+        return rv;
+    }, {})
+};
 
-// let result = games.reduce((res, row, idx) => {
-//     let value = formatObject(header, row);
-//     res[value.event_type] = value;
-//     return res;
-// }, {});
+var people = [
+    {sex:"Male", name:"Jeff"},
+    {sex:"Female", name:"Megan"},
+    {sex:"Male", name:"Taylor"},
+    {sex:"Female", name:"Madison"}
+];
+var groupedPeople=groupArrayOfObjects(people,"sex");
+console.log(groupedPeople.Male);//will be the Males
 
-// function formatObject(headers, cells) {
-//     return headers.reduce((result:string, header:number, idx:number) => {
-//         result[header]= cells[idx];
-//         return result;
-//     }, {})
-// };
 
-console.log(headings);
-console.log(data);
+const printRankingSystem = () => {
+    const PlayerId = '';
+    const Win = 0;
+    const Lose = 10;
+    const Percent = 0.12;
+    const Roll = 2020;
+    const Ladder = 10;
+    console.log(`Player: ${PlayerId}: Win: ${Win}, Lose: ${Lose}, Percent: ${Percent}, Rolls: ${Roll}, Ladders: ${Ladder}`)
+}
+
+printRankingSystem();

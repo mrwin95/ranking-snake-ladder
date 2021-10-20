@@ -2,7 +2,7 @@ export class Game {
 
     gameId: number;
 
-    constructor(gameId){
+    constructor(gameId:number){
         this.gameId = gameId;
     }
 }
