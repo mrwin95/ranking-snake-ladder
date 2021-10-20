@@ -1,0 +1,2 @@
+init tsc config file
+
